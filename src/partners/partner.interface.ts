@@ -1,3 +1,3 @@
 export interface Partner {
-    get(body: Object, query: string): void;
+    get(query: string, param: string[][] | null): void;
 }

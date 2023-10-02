@@ -2,13 +2,12 @@ import express from 'express';
 import * as bodyParser from 'body-parser';
 import cors from "cors";
 import helmet from "helmet";
-import UserController from './controllers/user/user.controller';
 
 class App {
     public app: express.Application;
     public port: number;
 
-    constructor(controllers: UserController[], port: number) {
+    constructor(controllers: any, port: number) {
         this.app = express();
         this.port = port;
 
