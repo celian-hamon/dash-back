@@ -1,18 +1,18 @@
 import {Partner} from "./partner.interface";
+import {SummonerLeague} from "../entities/league/summoner.league"
+import utils from "./utils";
+import Dict = NodeJS.Dict;
 
 export class leaguePartner implements Partner {
-    public apiPath = 'https://euw1.api.riotgames.com/lol';
+    public apiPath = 'https://api.riotgames.com/lol';
+    public apiPathMapping: { [key: string]: string } = {
+        "euw": 'https://euw1.api.riotgames.com/lol',
+        'euwM': 'https://europe.api.riotgames.com/lol',
+    }
 
-    async get(query: string, param: string[][] | null = null): Promise<void> {
-        if (param != null) {
-            query += '?';
-            param.forEach((p) => {
-                query += p[0] + '=' + p[1] + '&';
-            });
-        }
-
+    async get(query: string, region: string, param: any | null = null): Promise<any> {
         const response = await fetch(
-            this.apiPath + query,
+            this.apiPathMapping[region] + query + utils.getParamsString(param),
             {
                 method: 'GET',
                 headers: {
@@ -26,4 +26,10 @@ export class leaguePartner implements Partner {
         return await response.json();
     }
 
+    async getSummonerByName(name: string, region: string): Promise<SummonerLeague> {
+        return await this.get(
+            '/summoner/v4/summoners/by-name/' + name,
+            region
+        ) as unknown as SummonerLeague;
+    }
 }

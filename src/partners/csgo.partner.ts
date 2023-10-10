@@ -1,17 +1,12 @@
 import {Partner} from "./partner.interface";
+import utils from "./utils";
 
 export class csgoPartner implements Partner {
     public apiPath = 'https://api.steampowered.com/ICSGOServers_730/GetGameServersStatus/v1';
 
-    async get(query: string, param: string[][] | null = null): Promise<void> {
-        if (param != null) {
-            query += '?';
-            param.forEach((p) => {
-                query += p[0] + '=' + p[1] + '&';
-            });
-        }
+    async get(query: string, param: any | null = null): Promise<void> {
         const response = await fetch(
-            this.apiPath + '?key=' + process.env["STEAM_API_KEY"] as string,
+            this.apiPath + utils.getParamsString(param),
             {
                 method: 'GET',
                 headers: {

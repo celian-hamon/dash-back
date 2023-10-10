@@ -25,6 +25,12 @@ class App {
         controllers.forEach((controller) => {
             this.app.use('/', controller.router);
         });
+
+        // since its last route matched it will return 404
+        this.app.use((req, res) => res.json({
+            status: 404,
+            message: "Not Found"
+        }));
     }
 
     public listen() {
